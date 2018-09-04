@@ -1,0 +1,355 @@
+<!DOCTYPE>
+<html ng-app="myApp">
+<head>
+	<title>Travelista</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css"/>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+</head>
+<style type="text/css">
+	body {
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.nav-tabs#main_tabs {
+	border-bottom: none;
+	background-color: #dcdcdc;
+}
+
+form, .leftpanel {
+	border: 5px solid #f1f1f1;
+	border-radius: 25px;
+	padding: 10px;
+	margin: 20px;
+}
+
+input[type=text] {
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	border-radius: 10px;
+}
+
+button {
+	background-color: lightgreen;
+	color: black;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	border-radius: 10px;
+}
+
+button:hover {
+	opacity: 0.8;
+}
+
+.formcontainer {
+	padding: 16px;
+	border-radius: 25px;
+}
+
+.center {
+	width: 50%;
+	margin: auto;
+	padding: 10px;
+	height: auto;
+}
+
+td.center, th.center {
+	text-align: center;
+}
+
+table, th, td {
+	border: 1px solid grey;
+	border-collapse: collapse;
+	padding: 5px;
+	text-align: left,
+	table-layout: fixed;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+}
+
+th {
+	background: lightgreen;
+}
+
+.header {
+	padding-left: 20px;
+	margin: 0px;
+	padding-right: 20px;
+}
+
+.heading {
+	height: 100px;
+	background-color: lightgreen;
+	padding-top: 20px;
+}
+
+.content {
+	padding-left: 20px;
+}
+
+a {
+	color: black;
+}
+
+</style>
+
+<body ng-controller="myCtrl">
+
+	<header class="heading">
+		<h1 class="header">Travelista</h1>
+		<p class="header">..........................................................Let's talk travel</p>
+	</header>
+
+	<div class="tabbable" data-ng-init="init">
+		<!-- Tabs -->
+		<ul class="nav nav-tabs" id="main_tabs">
+			<li class="active"><a data-target="#home" data-toggle="tab"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+			<li><a data-target="#view" data-toggle="tab"><i class="fa fa-list" aria-hidden="true"></i> Travels</a></li>
+			<li><a data-target="#add" data-toggle="tab"><i class="fa fa-plus" aria-hidden="true"></i> Add</a></li>
+			<li><a data-target="#modify" data-toggle="tab"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Modify</a></li>
+		</ul>
+
+	<div class="tab-content">
+		
+		<!-- Home -->
+		<div class="tab-pane active" id="home">
+			<h2 align="center" class="content">Welcome</h3>
+			<br>
+			<p class="content">Hello there!! Welcome to Travelista!! 
+			Here you can view, add and modify the details of your holiday plans. 
+			Start by navigating to "Add" tab, and add your holiday plan - you can add the name of destination, cost of trip and a small description about your trip, such as, why you chose to go there, what did you like the most about it. 
+			Then you can go to the "Travel" tab and view all your holiday list. 
+			If you wish to modify any travel plan, go to the "Modify" tab.</p>
+			<p class="content">Have fun!!</p>
+
+		</div>
+
+		<!-- View Product Details -->
+		<div class="tab-pane" id="view">
+			<section class="header">
+				<h2 align="center">Here are you Holiday Plans!!</h3>
+				<br>
+				<div id="list-of-tables" style="display: none;">
+					<table class="table table-bordered" id="table-of-items">
+						<tr>
+							<th>S.No.</th>
+							<th>Destination</th>
+							<th>Cost of Trip</th>
+							<th>Description</th>
+						</tr>
+						<tr ng-repeat="product in result">
+							<td>{{ product.id }}</td>
+							<td>{{ product.name }}</td>
+							<td>{{ product.price }}</td>
+							<td>{{ product.description }}</td>
+						</tr>
+					</table>
+				</div>
+			</section>
+		</div>
+
+		<!-- Add Product -->
+		<div class="tab-pane" id="add">
+			<h2 align="center">Add your Holiday Plan</h2>
+			<form id="addnewproduct">
+				<div class="formcontainer">
+					<label for="name"><b>Destination</b></label>
+					<input type="text" name="name" value="" id="name" placeholder="Enter destination" required>
+
+					<label for="price"><b>Cost of Trip</b></label>
+					<input type="text" name="price" value="" id="price" placeholder="Enter cost" required>
+
+					<label for="desc"><b>Description</b></label>
+					<input type="text" name="desc" value="" id="desc" placeholder="Enter description" required>
+
+					<button type="submit" ng-click="addDetails()" style="display:inline-block;">ADD</button>
+					<button type="clear" ng-click="clearAddForm()" style="display:inline-block; position: relative; float: right;" >CLEAR</button>
+				</div>
+			</form>
+		</div>
+
+		<!-- Modify Product -->
+		<div class="tab-pane" id="modify">
+			<h2 align="center">Holiday Plan Modification</h2>
+			<div class="row">
+				<div class="col-sm-offset-1 col-md-3">
+					<section class="leftpanel">
+					<h4>Available Travel Plans</h4>
+					<br>
+					<select ng-model="optionSelector" ng-options="obj.id for obj in result" id="selector">
+						<option value="">Select ID</option>
+					</select>
+					<br><br>
+					<button id="modifybutton" ng-click="showForm()">MODIFY</button>
+					</section>
+				</div>
+
+				<div class="col-md-7">
+					<div id="modifyproductform" style="display: none;">
+						<form id="modifyproduct">
+						
+							<label for="editname"><b>Destination</b></label>
+							<input type="text" name="editname" value="" id="editname" placeholder="Enter new destination" required>
+
+							<label for="editprice"><b>Cost of Trip</b></label>
+							<input type="text" name="editprice" value="" id="editprice" placeholder="Enter new cost" required>
+
+							<label for="editdesc"><b>Description</b></label>	
+							<input type="text" name="editdesc" value="" id="editdesc" placeholder="Enter new description" required>
+
+							<button type="submit" ng-click="editDetails()" style="display:inline-block;">SUBMIT</button>
+							<button type="clear" ng-click="clearForm()" style="display:inline-block; position: relative; float: right;" >CLEAR</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+	var app = angular.module('myApp', []);
+
+app.controller('myCtrl', function($scope, $http) {
+
+	$scope.init = new function() {
+		console.log("Controller active");
+	}
+
+	$(document).ready(function(){ 
+  		// Listen with the jQuery to the tabs click:
+  		$('#main_tabs a').click(function (link) {
+    		console.log(link.currentTarget.innerText);
+    		var tab = link.currentTarget.innerText;
+    		var str = new String(tab);
+    		
+    		var mod = " Modify";
+    		console.log(str);
+    		if (mod == str) {
+    			$scope.getProducts();
+    		}
+
+    		var prod = " Travels";
+    		if (prod == str) {
+    			$scope.showTable();
+    		}
+  		});
+	})
+
+	$scope.clearForm = function() {
+		$("#editname").val("");
+		$("#editprice").val("");
+		$("#editdesc").val("");
+	}
+
+	$scope.clearAddForm = function() {
+		$("#name").val("");
+		$("#price").val("");
+		$("#desc").val("");
+	}
+
+	$scope.showForm = function() {
+		document.getElementById("modifyproductform").style.display="block";
+	}
+
+	$scope.showTable = function() {
+		$scope.getProducts();
+		document.getElementById("list-of-tables").style.display="block";
+	}
+
+	$scope.getProducts = function() {
+		console.log("Inside getProducts");
+
+		$http({
+			method : 'GET',
+			url : 'http://localhost:8585/productdetails'
+		}).then(function successCallback(response) {
+			$scope.result = response.data.product;
+			console.log(JSON.stringify(response));
+			if ($scope.result == null) {
+				alert("No records found. You can start by adding a new product");
+			}
+		}, function errorCallback(error) {
+			console.log(JSON.stringify(error));
+			alert("Connection refused, please check if the service is running..");
+		});
+	}
+
+	$scope.addDetails = function() {
+		console.log("Inside addDetails");
+
+		var name = $("#name").val();
+		var price = $("#price").val();
+		var desc = $("#desc").val();
+
+		if (name == "" || price == "" || desc == "") {
+			alert("Please enter all values to proceed.");
+		} else {
+
+		$http({
+			method : 'POST',
+			url : 'http://localhost:8585/addproduct',
+			data : { "name" : name, "price" : price, "description" : desc }
+		}).then(function successCallback(response) {
+			console.log(JSON.stringify(response));
+			alert("Added successfully");
+			$("#name").val("");
+			$("#price").val("");
+			$("#desc").val("");
+		}, function errorCallback(error) {
+			alert("Connection refused, please check if the service is running..");
+			console.log(error);
+		});
+		}
+	}
+
+	$scope.editDetails = function() {
+		console.log("Inside editDetails");
+
+		var e = document.getElementById("selector")
+		var idIs = e.options[e.selectedIndex].text;
+		var id = Number(idIs);
+
+		var name = $("#editname").val();
+		var price = $("#editprice").val();
+		var desc = $("#editdesc").val();
+		console.log("values :", idIs, id, name, price, desc)
+
+		if (name == "" || price == "" || desc == "") {
+			alert("Please enter all values to proceed.");
+		} else {
+
+		$http({
+			method : 'POST',
+			url : 'http://localhost:8585/editproduct',
+			data : { "id" : id, "name" : name, "price" : price, "description" : desc }
+		}).then(function successCallback(response) {
+			console.log(JSON.stringify(response));
+			alert("Edited successfully!!");
+			$("#editname").val("");
+			$("#editprice").val("");
+			$("#editdesc").val("");
+		}, function errorCallback(error) {
+			alert("Connection refused, please check if the service is running..");
+			console.log(error);
+		});
+
+		}
+	}
+
+})
+
+</script>
+</html>
